@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Poruka;
+
 
 class MessageController extends Controller
 {
@@ -41,7 +43,7 @@ class MessageController extends Controller
      */
     public function show(string $id)
     {
-        $poruka = Message::find($id); // Dobijanje jedne poruke prema ID-u
+        $poruka = Poruka::find($id); // Dobijanje jedne poruke prema ID-u
         if (!$poruka) {
             return response()->json(['error' => 'Message not found'], 404);
         }
