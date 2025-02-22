@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string(column:'username');
-            $table->string(column:'email')->unique();
-            $table->string(column:'password');
-            $table->timestamps();
+        Schema::table('chat_participants', function (Blueprint $table) {
+            $table->unique(['chat_id', 'user_id']);
         });
-
     }
 
     /**
@@ -26,7 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-       
+        Schema::table('chat_participants', function (Blueprint $table) {
+            $table->dropUnique(['chat_id', 'user_id']);
+        });
     }
 };

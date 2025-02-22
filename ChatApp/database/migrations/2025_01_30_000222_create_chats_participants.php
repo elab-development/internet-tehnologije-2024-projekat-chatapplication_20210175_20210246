@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('chat_participants', function (Blueprint $table) {
             $table->id();
-            $table->string(column:'username');
-            $table->string(column:'email')->unique();
-            $table->string(column:'password');
+            $table->foreignId(column:'chat_id')->constrained(table:'chats')->cascadeOnDelete();
+            $table->foreignId(column:'user_id')->constrained(table:'users')->cascadeOnDelete();
             $table->timestamps();
         });
-
     }
 
     /**
@@ -26,7 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-       
+        Schema::dropIfExists('chats_participant');
     }
 };
