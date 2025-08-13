@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::get('/messages/search', [ChatMessageController::class, 'search']);
 
-Route::middleware('auth:sanctum')->post('/change/password', [UpdatePasswordController::class, 'update']);
+Route::middleware('auth:sanctum')->patch('/change/password', [UpdatePasswordController::class, 'update']);
 
 Route::fallback(function () {
     return response()->json(['message' => 'Route not found'], 404);
