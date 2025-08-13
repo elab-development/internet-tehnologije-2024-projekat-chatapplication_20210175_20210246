@@ -14,6 +14,7 @@ Route::get('auth/logout', [AuthController::class, 'logout'])->middleware('auth:s
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('chat', ChatController::class)->only(['index', 'store', 'show']);
     Route::apiResource('chat_message', ChatMessageController::class)->only(['index', 'store']);
+    Route::delete('delete_message', [ChatMessageController::class, 'destroy']);
     Route::apiResource('user', UserController::class)->only(['index']);
 });
 
