@@ -9,7 +9,8 @@ class UserController extends Controller
 {
     public function index(): JsonResponse
     {
-        $users = User::where('id', '!=', auth('api')->user()->id)->get();
+
+        $users = User::where('id', '!=', auth('api')->user()->id)->get()->makeHidden(['password']);
         return $this->success($users);
     }
 }
