@@ -7,6 +7,7 @@ use App\Http\Requests\GetChatRequest;
 use App\Models\Chat;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Http\Requests\StoreChatRequest;
+use App\Http\Resources\ChatResource;
 
 class ChatController extends Controller
 {
@@ -26,7 +27,7 @@ class ChatController extends Controller
             ->latest('updated_at')
             ->get();
 
-        return $this->success($chats, 'Chat list retrieved successfully.');
+        return $this->success(ChatResource::collection($chats), 'Chat list retrieved successfully.');
     }
 
     /**
@@ -53,10 +54,10 @@ class ChatController extends Controller
             ]);
 
             $chat->refresh()->load('lastMessage.user', 'participants.user');
-            return $this->success($chat);
+            return $this->success(new ChatResource($chat));
         }
 
-        return $this->success(data: $previousChat()->load('lastMessage.user', 'participants.user'));
+        return $this->success(new ChatResource($previousChat->load('lastMessage.user', 'participants.user')));
     }
 
 
@@ -95,6 +96,6 @@ class ChatController extends Controller
     public function show(Chat $chat): JsonResponse
     {
         $chat->load(['lastMessage.user', 'participants.user']);
-        return $this->success($chat);
+        return $this->success(new ChatResource($chat));
     }
 }

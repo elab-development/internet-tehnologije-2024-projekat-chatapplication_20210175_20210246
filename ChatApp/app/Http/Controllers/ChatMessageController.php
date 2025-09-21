@@ -9,6 +9,7 @@ use App\Http\Requests\SearchMessageRequest;
 use App\Events\NewMessageSent;
 use App\Http\Requests\DeleteMessageRequest;
 use App\Http\Requests\GetMessageRequest;
+use App\Http\Resources\ChatMessageResource;
 
 class ChatMessageController extends Controller
 {
@@ -29,7 +30,7 @@ class ChatMessageController extends Controller
                 $currentPage
             );
 
-        return $this->success($messages->getCollection());
+        return $this->success(ChatMessageResource::collection($messages->getCollection()));
     }
 
     public function store(StoreMessageRequest $request)
@@ -43,7 +44,7 @@ class ChatMessageController extends Controller
         /// ovde treba dodati posle slanje poruke
         $this->sendNotificationToOther($chatMessage);
 
-        return $this->success($chatMessage, message: 'Message has been sent successfully.');
+        return $this->success(new ChatMessageResource($chatMessage), message: 'Message has been sent successfully.');
     }
 
 
@@ -87,6 +88,6 @@ class ChatMessageController extends Controller
             return $this->error("Poruka nije pronadjena");
         }
 
-        return $this->success($messages, "Poruka uspesno pronadjena");
+        return $this->success(ChatMessageResource::collection($messages), "Poruka uspešno pronađena");
     }
 }

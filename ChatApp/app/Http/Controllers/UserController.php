@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\JsonResponse;
 
@@ -10,7 +11,7 @@ class UserController extends Controller
     public function index(): JsonResponse
     {
 
-        $users = User::where('id', '!=', auth('api')->user()->id)->get()->makeHidden(['password']);
-        return $this->success($users);
+        $users = User::where('id', '!=', auth('api')->user()->id)->get();
+        return $this->success(UserResource::collection($users));
     }
 }

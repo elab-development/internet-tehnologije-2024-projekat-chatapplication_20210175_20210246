@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Http\Requests\LogInRequest;
 use App\Http\Requests\RegisterRequest;
@@ -10,9 +11,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Response;
 
+
 class AuthController extends Controller
 {
-    public function register(RegisterRequest $request):JsonResponse
+    public function register(RegisterRequest $request): JsonResponse
     {
         $data = $request->validated();
         $data['password'] = Hash::make($data['password']);
@@ -20,47 +22,52 @@ class AuthController extends Controller
         $token = $user->createToken(User::USER_TOKEN);
 
         return $this->success([
-            'user'=>$user,
-            'token'=>$token->plainTextToken], message:'User has been register');}
+            'user' => new UserResource($user),
+            'token' => $token->plainTextToken
+        ], message: 'User has been register');
+    }
 
 
-    public function login(LogInRequest $request):JsonResponse
+    public function login(LogInRequest $request): JsonResponse
     {
         $isValid = $this->isValidCredential($request);
 
         if (!$isValid['success']) {
             return $this->error($isValid['message'], statusCode: Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-    
+
         $user = $isValid['user'];
         $token = $user->createToken(User::USER_TOKEN);
-    
+
         return $this->success([
-            'user' => $user,
+            'user' => new UserResource($user),
             'token' => $token->plainTextToken
-        ], message: 'Login successfully!'); 
+        ], message: 'Login successfully!');
     }
 
 
-    private function isValidCredential(LoginRequest $request):array{
-    
-    $data = $request->validated();
-    $user = User::where('email', $data['email'])->first();
+    private function isValidCredential(LoginRequest $request): array
+    {
 
-    if ($user === null) {
-        return [
-            'success' => false,
-            'message' => 'Invalid Credential'
-        ];
-    }else if (Hash::check($data['password'], $user->password)) {
-        return [
-            'success' => true,
-            'user' => $user
-        ];
-    }else{
-        return [
-            'success' => false,
-            'message' => 'Password is not matched'];}
+        $data = $request->validated();
+        $user = User::where('email', $data['email'])->first();
+
+        if ($user === null) {
+            return [
+                'success' => false,
+                'message' => 'Invalid Credential'
+            ];
+        } else if (Hash::check($data['password'], $user->password)) {
+            return [
+                'success' => true,
+                'user' => new UserResource($user),
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => 'Password is not matched'
+            ];
+        }
     }
 
 
