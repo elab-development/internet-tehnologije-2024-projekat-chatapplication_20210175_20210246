@@ -1,0 +1,58 @@
+.dashboard-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(to right, #f0f4f8, #e2e8f0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.dashboard-card {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.dashboard-card h1 {
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  color: #1a202c;
+}
+
+.dashboard-card button {
+  display: block;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dashboard-card button.chats-btn {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.dashboard-card button.chats-btn:hover {
+  background-color: #2563eb;
+}
+
+.dashboard-card button.logout-btn {
+  background-color: #4b5563;
+  color: white;
+}
+
+.dashboard-card button.logout-btn:hover {
+  background-color: #374151;
+}
